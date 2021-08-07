@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using SkiaSharp;
 
@@ -29,7 +27,7 @@ namespace SkImageResizer
             allFiles.ForEach((filePath) => ResizeJob(filePath, destPath, scale));
         }
 
-        public void ResizeImagesAsync(string sourcePath, string destPath, double scale)
+        public Task ResizeImagesAsync(string sourcePath, string destPath, double scale)
         {
             if (!Directory.Exists(destPath))
             {
@@ -42,11 +40,10 @@ namespace SkImageResizer
 
             allFiles.ForEach((filePath) =>
             {
-                Task t = Task.Run(() => ResizeJob(filePath, destPath, scale));
-                tasks.Add(t);
+                tasks.Add(Task.Run(() => ResizeJob(filePath, destPath, scale)));
             });
 
-            Task.WaitAll(tasks.ToArray());
+            return Task.WhenAll(tasks);
         }
 
         private void ResizeJob(string filePath, string destPath, double scale)
