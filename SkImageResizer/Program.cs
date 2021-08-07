@@ -10,7 +10,7 @@ namespace SkImageResizer
     {
         static readonly Stopwatch sw = new Stopwatch();
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             var imageProcess = new SKImageProcess();
             var sourcePath = Path.Combine(Environment.CurrentDirectory, "images");
@@ -36,7 +36,7 @@ namespace SkImageResizer
 
             try
             {
-                await imageProcess.ResizeImagesAsync(sourcePath, destinationPath2, 2.0);
+                imageProcess.ResizeImagesAsync(sourcePath, destinationPath2, 2.0);
             }
             catch (OperationCanceledException ex)
             {
